@@ -41,19 +41,6 @@ def Pivot_Arrange(Daily):
 
         return (PIVOTS)
 
-"""
-def Opening_Range(Instant)
-    t1 = datetime.now().time()
-    t2 = datetime(2020, 9, 27, 9, 15, 0).time()
-    if datetime.now().time() != datetime(2020,9,27,9,15,0).time():
-        min(Instant)=OR_Low
-        max(Instant)=OR_High
-
-def UP_DOWN(Instant)
-    if Last >= OR
-"""
-
-
 df = pd.read_csv("S_I..N..C..Ind..csv")
 print(Pivot_Arrange(df))
 
