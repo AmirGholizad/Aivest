@@ -21,7 +21,7 @@ def OR_Calculator(a,b,c):
     ticks_frame = pd.DataFrame(ticks)
     OR_high = max(ticks_frame["last"])
     OR_low = min(ticks_frame["last"])
-    return [OR_high,OR_low]
+    return [OR_high,OR_low,ticks_frame]
 
 Details = OR_Calculator(2020,10,6)
 
