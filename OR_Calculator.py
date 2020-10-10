@@ -6,7 +6,7 @@ pd.set_option('display.width', 1500)      # max table width to display
 import pytz
 
 
-def OR_Calculator(a,b,c):
+def OR_Calculator(a,b,c,symbol):
 
     mt5.initialize()
     # set time zone to UTC
@@ -15,14 +15,16 @@ def OR_Calculator(a,b,c):
     OR_Start = datetime(a,b,c, 10, 30, 0,  tzinfo=timezone)
     OR_Stop = datetime(a,b,c,10, 45, 0, tzinfo=timezone)
     # request SAFAB99 ticks within 10:30:00 - 10:45:00
-    ticks = mt5.copy_ticks_range("SAFAB99", OR_Start, OR_Stop, mt5.COPY_TICKS_ALL)
-    print("Ticks received:",len(ticks))
+    ticks = mt5.copy_ticks_range(symbol , OR_Start, OR_Stop, mt5.COPY_TICKS_ALL)
 
+    if len(ticks) == 0:
+        return None
     ticks_frame = pd.DataFrame(ticks)
     OR_high = max(ticks_frame["last"])
     OR_low = min(ticks_frame["last"])
-    return [OR_high,OR_low,ticks_frame]
+    return [OR_high,OR_low]
 
-Details = OR_Calculator(2020,10,6)
+#Details = OR_Calculator(2020,9,10)
 
-print("SAFAB99 details:\n ORlow={}\n ORhigh={}".format(Details[0],Details[1]))
+#print("SAFAB99 details:\n ORlow={}\n ORhigh={}".format(Details[0],Details[1]))
+#OR_Calculator(2020,9,18)
