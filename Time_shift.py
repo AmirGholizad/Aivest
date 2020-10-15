@@ -7,7 +7,7 @@ import pytz
 pd.set_option('display.max_columns', 500)  # number of columns to be displayed
 pd.set_option('display.width', 1500)  # max table width to display
 
-def ATR_Calculator(y,m,d,symbol):
+def Time_Shift(y,m,d,symbol):
     mt5.initialize()
     # set time zone to UTC
     timezone = pytz.timezone("Etc/UTC")
@@ -21,12 +21,11 @@ def ATR_Calculator(y,m,d,symbol):
     rates_frame['time'] = pd.to_datetime(rates_frame['time'], unit='s')
     # if you need to see the data print rates_frame. Otherwise let it be as a comment
     # print(rates_frame)
-    # create the TR as an array with specified length
-    TR = np.zeros(30)
-    # start to fill the TR
-    for i in range(1,31):
-        TR[i-1] = max(rates_frame['high'][i],rates_frame['close'][i-1])-min(rates_frame['low'][i],rates_frame['close'][i-1])
-    # now make the ATR dictionary
-    ATR = sum(TR[-10:-1])/10
-    ATR = {'time' : rates_frame["time"].iloc[-1], 'ATR' : ATR}
-    return ATR
+    # now shift the time to day before
+    timeshift = rates_frame['time'].iloc[-2].date()
+    timeshift = str(timeshift)
+    timeshift = timeshift.split('-')
+    Y = int(timeshift[0])
+    M = int(timeshift[1])
+    D = int(timeshift[2])
+    return [Y,M,D]

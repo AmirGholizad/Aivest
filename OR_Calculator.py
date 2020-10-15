@@ -26,3 +26,4 @@ def OR_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2):
     OR_high = max(ticks_frame["last"])
     OR_low = min(ticks_frame["last"])
     return [OR_high,OR_low]
+

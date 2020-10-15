@@ -47,7 +47,10 @@ if market.lower() == 'ime':
     h3 = 15
     m3 = 0
     s3 = 0
-todaydate = datetime.datetime.today().date()
+if datetime.datetime.today().time().hour > 15:
+    todaydate = datetime.datetime.today().date()
+else:
+    todaydate = datetime.datetime.today().date() - datetime.timedelta(days=1)
 todaydatestr = str(todaydate)
 todaydatelist = todaydatestr.split('-')
 y = int(todaydatelist[0])
@@ -55,5 +58,6 @@ m = int(todaydatelist[1])
 d = int(todaydatelist[2])
 
 date_and_time = [y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3]
-
-print(MACRO_Calculator.Macro_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3))
+orlist = OR_Calculator.OR_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2)
+print(orlist)
+print(MACRO_Calculator.Score_Calculator(symbol,orlist,y,m,d,h1,m1,s1,h3,m3,s3))
