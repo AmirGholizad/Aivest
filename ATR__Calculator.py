@@ -17,14 +17,15 @@ def ATR_Calculator(y,m,d,symbol):
     rates = mt5.copy_rates_from(symbol, mt5.TIMEFRAME_D1, utc_from, 32)
     # create DataFrame out of the obtained data
     rates_frame = pd.DataFrame(rates)
+    DaysOn = len(rates_frame)
     # convert time in seconds into the datetime format
     rates_frame['time'] = pd.to_datetime(rates_frame['time'], unit='s')
     # if you need to see the data print rates_frame. Otherwise let it be as a comment
     # print(rates_frame)
     # create the TR as an array with specified length
-    TR = np.zeros(30)
+    TR = np.zeros(DaysOn-2)
     # start to fill the TR
-    for i in range(1,31):
+    for i in range(1,DaysOn-1):
         TR[i-1] = max(rates_frame['high'][i],rates_frame['close'][i-1])-min(rates_frame['low'][i],rates_frame['close'][i-1])
     # now make the ATR dictionary
     ATR = sum(TR[-10:-1])/10
