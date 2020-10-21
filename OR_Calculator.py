@@ -30,22 +30,23 @@ def OR_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2):
     #print(ticks_frame)
     start = 0
     for i in range(0,len(ticks_frame)):
-        if int(ticks_frame["volume"][i]) > 0:
+        if (ticks_frame["bid"][i] == ticks_frame["last"][i]) or (ticks_frame["ask"][i] == ticks_frame["last"][i]):
             ticks_frame = ticks_frame[i:]
             start = i
             break
     for j in range(start,len(ticks_frame)):
-        timediff = ticks_frame["time"][j] - ticks_frame["time"][0]
+        timediff = ticks_frame["time"][j] - ticks_frame["time"][start]
         timediff = int(datetime.timedelta.total_seconds(timediff)) / 60
         if timediff >= 15:
             ticks_frame = ticks_frame[:j]
+            print(ticks_frame)
             stop = j
             break
-    H = datetime.datetime.time(ticks_frame["time"].iloc[-1]).hour
-    M = datetime.datetime.time(ticks_frame["time"].iloc[-1]).minute
-    S = datetime.datetime.time(ticks_frame["time"].iloc[-1]).second
+    H = datetime.datetime.time(ticks_frame["time"].iloc[0]).hour
+    M = datetime.datetime.time(ticks_frame["time"].iloc[0]).minute
+    S = datetime.datetime.time(ticks_frame["time"].iloc[0]).second
     # find the OR_high and OR_low
     OR_high = max(ticks_frame["last"])
     OR_low = min(ticks_frame["last"])
     return [OR_high, OR_low, H, M, S]
-
+print(OR_Calculator("غبهار",2020,10,20,9,0,0,12,30,0))
