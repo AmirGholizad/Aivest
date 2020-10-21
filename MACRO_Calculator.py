@@ -10,7 +10,7 @@ import pytz
 import datetime
 
 # calculate the macro
-def Macro_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3):
+def Macro_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2):
     mt5.initialize()
     Score = np.zeros(30)
     Date = np.zeros(30, datetime.date)
@@ -24,7 +24,13 @@ def Macro_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3):
             m = adate[1]
             d = adate[2]
             continue
-        Score[j] = (Score_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3))
+        if Score_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2) == None:
+            adate = Time_Shift(y, m, d, symbol)
+            y = adate[0]
+            m = adate[1]
+            d = adate[2]
+            continue
+        Score[j] = Score_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2)[0]
         Date[j] = datetime.datetime(y,m,d)
         adate = Time_Shift(y, m, d, symbol)
         y = adate[0]
@@ -37,4 +43,4 @@ def Macro_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2,h3,m3,s3):
             Macro_10[k] = None
     MACROs = pd.DataFrame({ 'Date' : Date ,'Score' : Score , 'Macro' : Macro_10})
     return MACROs
-print(Macro_Calculator("SAFAB99",2020,10,13,10,30,0,10,45,0,15,0,0))
+print(Macro_Calculator("SAFAB99",2020,10,20,10,30,0,15,0,0))

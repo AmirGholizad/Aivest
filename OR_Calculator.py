@@ -2,6 +2,7 @@
 import datetime
 import MetaTrader5 as mt5
 import pandas as pd
+from Time_shift import Time_Shift
 pd.set_option('display.max_columns', 500) # number of columns to be displayed
 pd.set_option('display.width', 1500)      # max table width to display
 import pytz
@@ -23,7 +24,28 @@ def OR_Calculator(symbol,y,m,d,h1,m1,s1,h2,m2,s2):
         return None
     # calculate the OR_high and OR_low
     ticks_frame = pd.DataFrame(ticks)
+    ticks_frame['time'] = pd.to_datetime(ticks_frame['time'], unit='s')
+
+    # find the start time which is the time that first trade is done
+    #print(ticks_frame)
+    start = 0
+    for i in range(0,len(ticks_frame)):
+        if int(ticks_frame["volume"][i]) > 0:
+            ticks_frame = ticks_frame[i:]
+            start = i
+            break
+    for j in range(start,len(ticks_frame)):
+        timediff = ticks_frame["time"][j] - ticks_frame["time"][0]
+        timediff = int(datetime.timedelta.total_seconds(timediff)) / 60
+        if timediff >= 15:
+            ticks_frame = ticks_frame[:j]
+            stop = j
+            break
+    H = datetime.datetime.time(ticks_frame["time"].iloc[-1]).hour
+    M = datetime.datetime.time(ticks_frame["time"].iloc[-1]).minute
+    S = datetime.datetime.time(ticks_frame["time"].iloc[-1]).second
+    # find the OR_high and OR_low
     OR_high = max(ticks_frame["last"])
     OR_low = min(ticks_frame["last"])
-    return [OR_high,OR_low]
+    return [OR_high, OR_low, H, M, S]
 
